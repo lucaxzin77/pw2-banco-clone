@@ -7,16 +7,20 @@ DB_NAME=sistema_bancario
 # Caminho para os arquivos SQL
 SCHEMA=./sql/schema.sql
 INSERTS=./sql/inserts.sql
+PROCEDURES=./sql/procedures.sql
 
 # Apaga e recria apenas o schema
 reset-schema:
 	docker exec -i $(CONTAINER_NAME) mysql -u $(DB_USER) -p$(DB_PASS) < $(SCHEMA)
 
+# Cria procedures
+create-procedures:
+	docker exec -i $(CONTAINER_NAME) mysql -u $(DB_USER) -p$(DB_PASS) < $(PROCEDURES)
+
 # Apaga e recria o schema e popula com dados iniciais
 reset-db:
 	docker exec -i $(CONTAINER_NAME) mysql -u $(DB_USER) -p$(DB_PASS) < $(SCHEMA)
 	docker exec -i $(CONTAINER_NAME) mysql -u $(DB_USER) -p$(DB_PASS) $(DB_NAME) < $(INSERTS)
-
 # Executa apenas o seed (dados iniciais)
 inserts:
 	docker exec -i $(CONTAINER_NAME) mysql -u $(DB_USER) -p$(DB_PASS) $(DB_NAME) < $(INSERTS)
