@@ -20,7 +20,23 @@ create-procedures:
 # Apaga e recria o schema e popula com dados iniciais
 reset-db:
 	docker exec -i $(CONTAINER_NAME) mysql -u $(DB_USER) -p$(DB_PASS) < $(SCHEMA)
+	docker exec -i $(CONTAINER_NAME) mysql -u $(DB_USER) -p$(DB_PASS) $(DB_NAME) < $(PROCEDURES)
 	docker exec -i $(CONTAINER_NAME) mysql -u $(DB_USER) -p$(DB_PASS) $(DB_NAME) < $(INSERTS)
 # Executa apenas o seed (dados iniciais)
 inserts:
 	docker exec -i $(CONTAINER_NAME) mysql -u $(DB_USER) -p$(DB_PASS) $(DB_NAME) < $(INSERTS)
+
+build:
+	docker compose build --no-cache
+
+start:
+	docker compose up -d
+
+stop:
+	docker compose down -v
+
+restart: 
+	stop start
+
+logs:
+	docker logs -f web
