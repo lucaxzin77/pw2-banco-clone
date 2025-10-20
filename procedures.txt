@@ -1,0 +1,26 @@
+ClientePF
+    cadastrar() /
+    alterar() /
+    consultarTodos (com filtro de nome) /
+    consultarProCPF() /
+    consultarID() /
+    consultarPorEmail() /
+
+ClientePJ
+    cadastrar() /
+    alterar() /
+    consultarTodos (com filtro de nome, razao social) /
+    consultarProCNPJ() /
+    consultarID() /
+    consultarPorEmail() /
+
+Contas
+    cadastrar() /
+    alterar()
+    consultarID()
+    consultarPorCliente()
+    consultarTodos(filtrar por nome do cliente)
+
+Contas Transações
+    Depositar()
+    Transferir()
