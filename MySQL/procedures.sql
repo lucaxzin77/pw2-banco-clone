@@ -312,7 +312,7 @@ CREATE PROCEDURE IF NOT EXISTS Conta_create(
     IN p_user VARCHAR(50),
     IN p_pass VARCHAR(100),
     IN p_cliente_id INT UNSIGNED,
-    IN p_tipo_conta ENUM('corrente', 'poupanca') NOT NULL,
+    IN p_tipo_conta ENUM('corrente', 'poupanca')
 )
 BEGIN
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
@@ -333,3 +333,149 @@ BEGIN
     COMMIT;
 END$$
 
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS Conta_update;
+
+DELIMITER $$
+
+CREATE PROCEDURE IF NOT EXISTS Conta_update(
+    IN p_id BIGINT UNSIGNED,
+    IN p_status ENUM('ativa', 'inativa')
+)
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+    END;
+
+    START TRANSACTION;
+
+        UPDATE Contas SET status = p_status WHERE id = p_id;
+       
+    COMMIT;
+END$$
+
+DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS Conta_getById;
+
+DELIMITER $$
+
+CREATE PROCEDURE IF NOT EXISTS Conta_getById(
+    IN p_id INT UNSIGNED
+)
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+    END;
+
+    START TRANSACTION;
+
+       SELECT * FROM Contas WHERE id = p_id;
+       
+    COMMIT;
+END$$
+
+DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS Conta_getByCliente;
+
+DELIMITER $$
+
+CREATE PROCEDURE IF NOT EXISTS Conta_getByCliente(
+    IN p_clienteId INT UNSIGNED
+)
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+    END;
+
+    START TRANSACTION;
+
+       SELECT * FROM Contas, Clientes WHERE Clientes.id = Contas.cliente_id 
+       AND Clientes.id = p_clienteId;
+       
+    COMMIT;
+END$$
+
+DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS Conta_getAll;
+
+DELIMITER $$
+
+CREATE PROCEDURE IF NOT EXISTS Conta_getAll(
+    IN p_nome VARCHAR(100)
+)
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+    END;
+
+    START TRANSACTION;
+
+       SELECT * FROM Contas, Clientes WHERE Clientes.id = Contas.cliente_id 
+       AND Clientes.nome LIKE "%p_nome%";
+       
+    COMMIT;
+END$$
+
+DELIMITER ;
+
+-- TRANSACOES -------------------------------------------------------------
+
+DROP PROCEDURE IF EXISTS Depositar;
+
+DELIMITER $$
+
+CREATE PROCEDURE IF NOT EXISTS Depositar(
+    IN p_id_conta INT,
+    IN p_valor DECIMAL(15,2)
+)
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+    END;
+
+    START TRANSACTION;
+
+        INSERT INTO Transacoes(conta_id, tipo, valor, descricao) 
+        VALUES (p_id_conta, "deposito", p_valor, CONCAT("Um depósito de R$", p_valor, "foi realizado na conta ", p_id_conta, "!"));
+       
+    COMMIT;
+END$$
+
+DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS Sacar;
+
+DELIMITER $$
+
+CREATE PROCEDURE IF NOT EXISTS Sacar(
+    IN p_id_conta INT,
+    IN p_valor DECIMAL(15,2)
+)
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+    END;
+
+    START TRANSACTION;
+
+        INSERT INTO Transacoes(conta_id, tipo, valor, descricao) 
+        VALUES (p_id_conta, "saque", p_valor, CONCAT("Um saque de R$", p_valor, "foi realizado na conta ", p_id_conta, "!"));
+       
+    COMMIT;
+END$$
+
+DELIMITER ;

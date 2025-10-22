@@ -16,10 +16,10 @@ ClientePJ
 
 Contas
     cadastrar() /
-    alterar()
-    consultarID()
-    consultarPorCliente()
-    consultarTodos(filtrar por nome do cliente)
+    alterar() /
+    consultarID() /
+    consultarPorCliente() /
+    consultarTodos(filtrar por nome do cliente) /
 
 Contas Transações
     Depositar()

@@ -5,9 +5,9 @@ DB_PASS=root
 DB_NAME=sistema_bancario
 
 # Caminho para os arquivos SQL
-SCHEMA=./sql/schema.sql
-INSERTS=./sql/inserts.sql
-PROCEDURES=./sql/procedures.sql
+SCHEMA=./MySQL/schema.sql
+INSERTS=./MySQL/inserts.sql
+PROCEDURES=./MySQL/procedures.sql
 
 # Apaga e recria apenas o schema
 reset-schema:
